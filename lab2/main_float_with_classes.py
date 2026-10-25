@@ -1,6 +1,8 @@
 """Solution to the one billion rows problem."""
 import sys
 #import time
+import stats
+
 def round_half_up_mean(total: float, count: int) -> float:
     mean = total / count
     if mean >= 0:
@@ -16,19 +18,16 @@ def main() -> None:
     path = sys.argv[1]
     try:
         with open(path, "r", encoding="utf-8") as f:
-            final_dict: dict[str, list[int]] = {}
+            final_dict: dict[str, stats.StationStats] = {}
 #            making_dict_start_time = time.perf_counter()
             for line in f:
                 station, temperature_read = line[:-1].split(";")
                 temperature = float(temperature_read)
                 check = final_dict.get(station)
                 if check is None:
-                    final_dict[station] = [temperature, temperature, temperature, 1]
+                    final_dict[station] = stats.StationStats(temperature)
                 else:
-                    if temperature < check[0]: check[0] = temperature
-                    if temperature > check[2]: check[2] = temperature
-                    check[1] += temperature
-                    check[3] += 1
+                    stats.StationStats.update(check, temperature)
 #           making_dict_time = time.perf_counter() - making_dict_start_time
     except OSError as e:
         print(f"error: {e}", file=sys.stderr)
@@ -39,8 +38,8 @@ def main() -> None:
 #    sorting_dict_time = time.perf_counter() - sorting_dict_start_time
 #    output_start_time = time.perf_counter()
     for key in sorted_dict_keys:
-        mn, total, mx, cnt = final_dict[key]
-        print(f"{key};{mn};{round_half_up_mean(total, cnt)};{mx}")
+        now = final_dict[key]
+        print(f"{key};{stats.StationStats.__repr__(now)}")
 #    output_time = time.perf_counter() - output_start_time
 #    print(f"output_time = {output_time}, sorting_dict_time = {sorting_dict_time}, making_dict_time = {making_dict_time}")
 
