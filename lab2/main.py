@@ -2,6 +2,7 @@
 import sys
 import time
 
+
 def mean_tenths(total: int, count: int) -> int:
     return (2 * total + count) // (2 * count)
     
