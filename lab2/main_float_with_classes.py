@@ -1,47 +1,32 @@
 """Solution to the one billion rows problem."""
 import sys
-#import time
 import stats
 
-def round_half_up_mean(total: float, count: int) -> float:
-    mean = total / count
-    if mean >= 0:
-        return int(mean * 10 + 0.5) / 10
-    return int(mean * 10 - 0.5) / 10
 
 def main() -> None:
-    
     if len(sys.argv) != 2:
-        print("usage: main.py <file>", file=sys.stderr)
+        print("usage: main_float_with_classes.py <file>", file=sys.stderr)
         sys.exit(1)
 
     path = sys.argv[1]
     try:
         with open(path, "r", encoding="utf-8") as f:
             final_dict: dict[str, stats.StationStats] = {}
-#            making_dict_start_time = time.perf_counter()
             for line in f:
-                station, temperature_read = line[:-1].split(";")
+                station, temperature_read = line.rstrip("\n").split(";")
                 temperature = float(temperature_read)
                 check = final_dict.get(station)
                 if check is None:
                     final_dict[station] = stats.StationStats(temperature)
                 else:
-                    stats.StationStats.update(check, temperature)
-#           making_dict_time = time.perf_counter() - making_dict_start_time
+                    check.update(temperature)
     except OSError as e:
         print(f"error: {e}", file=sys.stderr)
         sys.exit(1)
-	
-#    sorting_dict_start_time = time.perf_counter()
-    sorted_dict_keys = sorted(final_dict)
-#    sorting_dict_time = time.perf_counter() - sorting_dict_start_time
-#    output_start_time = time.perf_counter()
-    for key in sorted_dict_keys:
-        now = final_dict[key]
-        print(f"{key};{stats.StationStats.__repr__(now)}")
-#    output_time = time.perf_counter() - output_start_time
-#    print(f"output_time = {output_time}, sorting_dict_time = {sorting_dict_time}, making_dict_time = {making_dict_time}")
+
+    for key in sorted(final_dict):
+        print(f"{key};{final_dict[key]}")
+
 
 if __name__ == "__main__":
     main()
