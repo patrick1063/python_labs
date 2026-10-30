@@ -6,14 +6,14 @@ LINE_PROFILE = 1
 
 @profile
 def process_file(path: str) -> dict[str, stats.StationStats]:
-    final_dict: dict[str, stats.StationStats] = {}
-    with open(path, "r", encoding="utf-8") as f:
+    final_dict: dict[bytes, stats.StationStats] = {}
+    with open(path, "rb") as f:
         for line in f:
-            station, temperature_read = line.rstrip("\n").split(";")
+            station_bytes, _, temperature_read = line.partition(b";")
             temperature = float(temperature_read)
-            check = final_dict.get(station)
+            check = final_dict.get(station_bytes)
             if check is None:
-                final_dict[station] = stats.StationStats(temperature)
+                final_dict[station_bytes] = stats.StationStats(temperature)
             else:
                 check.update(temperature)
     return final_dict
@@ -31,8 +31,8 @@ def main() -> None:
         print(f"error: {e}", file=sys.stderr)
         sys.exit(1)
 
-    for key in sorted(final_dict):
-        print(f"{key};{final_dict[key]}")
+    for key in sorted(final_dict, key = lambda a: a.decode("utf-8")):
+            print(f"{key.decode('utf-8')};{final_dict[key]}")
 
 
 if __name__ == "__main__":

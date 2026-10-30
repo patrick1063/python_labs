@@ -30,3 +30,5 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     18   9999589    9571766.0      1.0     47.8                  check.update(temperature)
     19         1          1.0      1.0      0.0      return final_dict
     
+
+Second version(binary read)
