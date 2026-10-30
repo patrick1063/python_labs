@@ -1,4 +1,4 @@
 .DS_Store
 data/measurements_10m.txt
 main_float_with_classes.py.lprof
-stats.cpython-313.pyc
+__pycache__/stats.cpython-313.pyc
