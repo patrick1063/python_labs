@@ -16,7 +16,6 @@ class StationStats:
     def __repr__(self):
         return f"{self._min};{round_half_up_mean(self._sum, self._count)};{self._max}"
 
-
     def update(self, value: float):
         if value < self._min:
             self._min = value
@@ -31,5 +30,19 @@ class StationStats:
         self._sum += other._sum
         self._count += other._count
 
-    
+    @property
+    def min(self) -> float:
+        return self._min
+
+    @property
+    def max(self) -> float:
+        return self._max
+
+    @property
+    def mean(self) -> float:
+        return self._sum / self._count
+
+    @property
+    def count(self) -> int:
+        return self._count
 

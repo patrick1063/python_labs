@@ -1,6 +1,22 @@
 """Solution to the one billion rows problem."""
 import sys
 import stats
+from line_profiler import profile
+LINE_PROFILE = 1
+
+@profile
+def process_file(path: str) -> dict[str, stats.StationStats]:
+    final_dict: dict[str, stats.StationStats] = {}
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            station, temperature_read = line.rstrip("\n").split(";")
+            temperature = float(temperature_read)
+            check = final_dict.get(station)
+            if check is None:
+                final_dict[station] = stats.StationStats(temperature)
+            else:
+                check.update(temperature)
+    return final_dict
 
 
 def main() -> None:
@@ -10,16 +26,7 @@ def main() -> None:
 
     path = sys.argv[1]
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            final_dict: dict[str, stats.StationStats] = {}
-            for line in f:
-                station, temperature_read = line.rstrip("\n").split(";")
-                temperature = float(temperature_read)
-                check = final_dict.get(station)
-                if check is None:
-                    final_dict[station] = stats.StationStats(temperature)
-                else:
-                    check.update(temperature)
+        final_dict = process_file(path)
     except OSError as e:
         print(f"error: {e}", file=sys.stderr)
         sys.exit(1)
