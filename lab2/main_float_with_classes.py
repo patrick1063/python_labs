@@ -15,7 +15,12 @@ def process_file(path: str) -> dict[str, stats.StationStats]:
             if check is None:
                 final_dict[station_bytes] = stats.StationStats(temperature)
             else:
-                check.update(temperature)
+                if temperature < check._min:
+                    check._min = temperature
+                if temperature > check._max:
+                    check._max = temperature
+                check._sum += temperature
+                check._count += 1
     return final_dict
 
 
