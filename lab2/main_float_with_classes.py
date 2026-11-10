@@ -5,7 +5,7 @@ from line_profiler import profile
 LINE_PROFILE = 1
 
 @profile
-def process_file(path: str) -> dict[str, stats.StationStats]:
+def process_file(path: str) -> dict[bytes, stats.StationStats]:
     final_dict: dict[bytes, stats.StationStats] = {}
     with open(path, "rb") as f:
         for line in f:
