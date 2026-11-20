@@ -7,7 +7,7 @@ def round_half_up_mean(total: float, count: int) -> float:
 class StationStats:
     __slots__ = ["_min", "_max", "_sum", "_count"]
     
-    def __init__(self, temperature: float):
+    def __init__(self, temperature: float) -> None:
         self._min = temperature
         self._max = temperature
         self._sum = temperature

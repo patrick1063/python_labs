@@ -13,13 +13,13 @@ def main() -> None:
     file_path = sys.argv[1]
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            final_dict: dict[str, list[int]] = {}
+            dict_of_stations: dict[str, list[int]] = {}
             for line in f:
                 station, temperature_read = line[:-1].split(";")
-                temperature = int(float(temperature_read) * 10)
-                check = final_dict.get(station)
+                temperature = int(temperature_read.replace(".", ""))
+                check = dict_of_stations.get(station)
                 if check is None:
-                    final_dict[station] = [temperature, temperature, temperature, 1]
+                    dict_of_stations[station] = [temperature, temperature, temperature, 1]
                 else:
                     if temperature < check[0]: check[0] = temperature
                     if temperature > check[2]: check[2] = temperature
@@ -29,10 +29,10 @@ def main() -> None:
         print(f"error: {e}", file=sys.stderr)
         sys.exit(1)
 
-    for key in sorted(final_dict):
-        mn, total, mx, cnt = final_dict[key]
-        mean = mean_tenths(total, cnt)
-        print(f"{key};{float(mn/10)};{float(mean/10)};{float(mx/10)}")
+    for key in sorted(dict_of_stations):
+        min, total, max, count = dict_of_stations[key]
+        mean = mean_tenths(total, count)
+        print(f"{key};{float(min/10)};{float(mean/10)};{float(max/10)}")
         
 if __name__ == "__main__":
     main()
