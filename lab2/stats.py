@@ -13,10 +13,10 @@ class StationStats:
         self._sum = temperature
         self._count = 1
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self._min};{round_half_up_mean(self._sum, self._count)};{self._max}"
 
-    def update(self, value: float):
+    def update(self, value: float) -> None:
         if value < self._min:
             self._min = value
         if value > self._max:
@@ -24,7 +24,7 @@ class StationStats:
         self._sum += value
         self._count += 1
 
-    def merge(self, other: "StationStats"):
+    def merge(self, other: "StationStats") -> None:
         self._min = min(self._min, other._min)
         self._max = max(self._max, other._max)
         self._sum += other._sum

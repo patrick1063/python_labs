@@ -33,8 +33,6 @@ def main() -> None:
         mn, total, mx, cnt = final_dict[key]
         mean = mean_tenths(total, cnt)
         print(f"{key};{float(mn/10)};{float(mean/10)};{float(mx/10)}")
-
         
-
 if __name__ == "__main__":
     main()
